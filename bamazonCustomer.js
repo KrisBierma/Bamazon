@@ -132,3 +132,8 @@ function askUser(){
     })
 };
 
+// module.exports = Customer; //put this whole thing in var?
+
+module.exports = connection;
+
+//2h45m

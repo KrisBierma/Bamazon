@@ -1,12 +1,13 @@
-Drop database if exists bamazonDB;
+-- Drop database if exists bamazonDB;
 
-Create database bamazonDB;
+Create database if not exists bamazonDB;
 
 Use bamazonDB;
 
 Create table if not exists products(
 	item_id integer(10) auto_increment,
     product_name varchar(30),
+    
     department_name varchar(30),
     price integer(10),
     stock_quantity integer(10),
