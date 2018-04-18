@@ -1,8 +1,5 @@
-// var fs=require("fs");
-// var Customer = require("./bamazonCustomer");
 var inquirer = require("inquirer");
 var mysql = require("mysql");
-// var connection = require("./bamazonCustomer");
 
 //connection info to mysql db
 var connection = mysql.createConnection({
@@ -54,8 +51,7 @@ function menu(){
 //takes in query from menu choices: view all products or those with quantity < 5
 var itemsList=[]; //array to hold objects of items for sale
 function viewProducts(query){
-    // var itemsList=[]; //array to hold objects of items for sale
-    
+   
     //query mysql to see all info in table
     connection.query(query,
     function(err, res){
@@ -191,6 +187,3 @@ function newProduct(){
         )
     })
 };
-
-//at 8h25m - 3.5h
-//finished 8h 38m (5 hours total to this point)

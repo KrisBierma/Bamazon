@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/KrisBierma/Bamazon#readme",
   "dependencies": {
+    "easy-table": "^1.1.1",
     "inquirer": "^5.2.0",
     "mysql": "^2.15.0"
   }

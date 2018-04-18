@@ -14,7 +14,6 @@ var connection = mysql.createConnection({
 //connect to the particular db
 connection.connect(function(err){
     if(err) throw err;
-    // console.log("Connected as id "+connection.thread+"\n");
     readProducts();
 });
 
@@ -25,13 +24,8 @@ function readProducts(){
     //query mysql to see all info in table
     var query = connection.query(
         "Select * From products",
-        // {
-        //     item_id, product_name, price
-        // },
     function(err, res){
         if (err) throw err;
-        // console.log(res.length);
-        // connection.end();
         itemsList=[];
         console.log("Items for sale:\n");
         for (var i=0; i<res.length;i++){
@@ -40,20 +34,16 @@ function readProducts(){
             item.name=res[i].product_name; //name
             item.price=res[i].price; //price
             item.quantity=res[i].stock_quantity; //quantity
-            // console.log(item.quantity); //working
             item={id:item.id, name:item.name, price:item.price, quantity:item.quantity};//put info into object
             itemsList.push({item:item}); //push object into array holding all items
-            // console.log(itemsList); //delete
-            console.log(item.id+" "+item.name+" $"+item.price+"\n");
-            // console.log(item); //delete
+            console.log(item.id+" "+item.name+" $"+item.price);
         }
-        // console.log("here"+itemsList);  //delete
 
         //call function to get user input
+        console.log("\n");
         askUser();
     }
     );
-    // console.log(query); //delete
 };
 
 //function to ask user what item and how many to buy
@@ -98,16 +88,18 @@ function askUser(){
 
             //if there are engough, figure new quantity
             var newQuantity = itemInfo.quantity - answer.units;
-            // console.log("newQuan: "+newQuantity); //delete
+            var total = answer.units*itemInfo.price;
 
             //update db, set quantity where id is
             connection.query(
                 "Update products Set ? Where ?",
                 [
                     {
-                        stock_quantity: newQuantity
+                        stock_quantity: newQuantity,
+                        product_sales:total
                     },
                     {
+                        item_id: answer.idToBuy,
                         item_id: answer.idToBuy
                     }
                 ],function(err){
@@ -115,13 +107,12 @@ function askUser(){
 
                     //show total of purchase
                     console.log("You bought "+answer.units+" units of "+itemInfo.name);
-                    console.log("Your total is: $"+answer.units * itemInfo.price+"\n");
+                    console.log("Your total is: $"+total+"\n");
                 }
             )
 
             //start over  
             readProducts();
-            // connection.end();
         }
         
         //else show error message and start over
@@ -131,9 +122,3 @@ function askUser(){
         }
     })
 };
-
-// module.exports = Customer; //put this whole thing in var?
-
-module.exports = connection;
-
-//2h45m
