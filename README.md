@@ -4,7 +4,7 @@ Bamazon is a CLI app that allows the user to buy products or a manager to check 
 ## Instructions
 
 1. Open up the terminal and navigate to the Bamazon folder.
-2. Type in "node", followed by "bamazonCustomer.js" or "bamazonManager.js" depending on which program you want to run. 
+2. Type in "node", followed by "bamazonCustomer.js"(https://cl.ly/22362J1e1C0S), "bamazonManager.js" or "bamazonSupervisor.js" depending on which program you want to run. 
 3. Follow the user prompts.
 4. Be amazed by the power of the node.
 
