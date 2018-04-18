@@ -23,7 +23,7 @@ function menu(){
             name:"menuOption",
             type:"rawlist",
             choices:["View inventory", "View low inventory", "Add to inventory", "Add new product"],
-            message:"Hi! What would you like to do today?"
+            message:"\nHi! What would you like to do today?"
         }
     ])
     .then(function(answer){
@@ -35,7 +35,7 @@ function menu(){
                 viewProducts(query);
                 break;
             case "View low inventory":
-                var query="Select item_id, product_name, stock_quantity From products Where stock_quantity<5";
+                var query="Select item_id, product_name, price, stock_quantity From products Where stock_quantity<5";
                 console.log("\nLow Inventory:");
                 viewProducts(query);
                 break;
@@ -45,7 +45,7 @@ function menu(){
                 viewProducts(query);
                 break;
             default:
-                // newProduct();
+                newProduct();
         };
     });
 };
@@ -74,9 +74,10 @@ function viewProducts(query){
                 console.log(item.id+" "+item.name+" $"+item.price+" "+item.quantity);
             };
         }
-        console.log("\n");    
+        console.log("\n");  
+        // console.log(itemsList);  
         if (!addingInventory){menu();}
-        else {addInventory()};
+        else {addInventory();};
         }
     );
 };
@@ -113,10 +114,13 @@ function addInventory(){
        }
     ])
    .then(function(answer){
+        //convert array place
+        convertItem = parseInt(answer.itemToAdd)-1;
+
         //figure new quantity
         var newQuantity=parseInt(answer.units) + parseInt(
-        itemsList[answer.itemToAdd].item.quantity);
-
+        itemsList[convertItem].item.quantity);
+ 
         connection.query(
             "Update products Set ? Where ?",
             [
@@ -129,9 +133,64 @@ function addInventory(){
             ],
         );
         addingInventory=false;
-        console.log("Item updated!\n");
+        console.log("\nItem updated!\n"+answer.units+" unit(s) of "+itemsList[convertItem].item.name+" added.\n");
         menu();
     })
 };
 
 //add new product
+function newProduct(){
+    inquirer.prompt([
+        {
+            name:"newProduct",
+            type:"input",
+            message:"What is the name of the new product?"
+        },
+        {
+            name:"department",
+            type:"input",
+            message:"What department is this in?"
+        },
+        {
+            name:"price",
+            type:"input",
+            message:"What is the price per unit?",
+            validate: function(value){
+                if(isNaN(value)===false){
+                    return true;
+                }
+                return false;
+            }
+        },
+        {
+            name:"quantity",
+            type:"input",
+            message:"How many units are you adding?",
+            validate: function(value){
+                if(isNaN(value)===false){
+                    return true;
+                }
+                return false;
+            }
+        }
+    ])
+    .then(function(answer){
+        connection.query(
+            "Insert Into products Set ?",
+            {
+                product_name: answer.newProduct,
+                department_name: answer.department,
+                price: answer.price,
+                stock_quantity: answer.quantity
+            },
+            function(err){
+                if(err) throw err;
+                console.log("Your item was successfully added.\n");
+                menu();
+            }
+        )
+    })
+};
+
+//at 8h25m - 3.5h
+//finished 8h 38m (5 hours total to this point)

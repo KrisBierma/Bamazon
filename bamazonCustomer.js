@@ -44,7 +44,7 @@ function readProducts(){
             item={id:item.id, name:item.name, price:item.price, quantity:item.quantity};//put info into object
             itemsList.push({item:item}); //push object into array holding all items
             // console.log(itemsList); //delete
-            console.log(item.id+" "+item.name+" $"+item.price);
+            console.log(item.id+" "+item.name+" $"+item.price+"\n");
             // console.log(item); //delete
         }
         // console.log("here"+itemsList);  //delete
